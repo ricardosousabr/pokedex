@@ -10,22 +10,35 @@ async function fetchPokemon(endpoint) {
   const response = await returnAPI.json();
   const imageReturn = response.sprites.front_default;
   const nameReturn = response.name;
+  const abilityOneReturn = response.abilities[0];
+  const abilityTwoReturn = response.abilities[1];
+  const abilityOne = abilityOneReturn.ability.name;
+  const abilityTwo = abilityTwoReturn.ability.name;
 
   // inserir mais de um endpoint na URl
   // uma fução que recebe o endepoint como prametro
   console.log(returnAPI);
-  return [nameReturn, imageReturn];
+  return [nameReturn, imageReturn, abilityOne, abilityTwo];
 }
 
 async function showPokemon() {
-  const [pokeName, pokeImage] = await fetchPokemon('pokemon');
+  const [pokeName, pokeImage, abilityOne, abilityTwo] = await fetchPokemon(
+    'pokemon'
+  );
   const pokemonName = document.createElement('span');
+  const pokeabilityOne = document.createElement('span');
+  const pokeabilityTwo = document.createElement('span');
   const pokemonImg = document.createElement('img');
 
-  pokemonName.innerHTML = await pokeName;
+  pokemonName.innerHTML = 'Name: ' + (await pokeName);
+  pokeabilityOne.innerHTML = 'Primeira habilidade: ' + (await abilityOne);
+  pokeabilityTwo.innerHTML = 'Segunda habilidade 2: ' + (await abilityTwo);
   pokemonImg.src = await pokeImage;
+  //pokemonability.innerHTML = await abilitiesReturn;
   boxData.appendChild(pokemonImg);
   boxData.appendChild(pokemonName);
+  boxData.appendChild(pokeabilityOne);
+  boxData.appendChild(pokeabilityTwo);
 }
 
 function clearPokemonData() {
