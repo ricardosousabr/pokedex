@@ -2,43 +2,61 @@ const form = document.querySelector('#search-form');
 const boxData = document.querySelector('.pokemon-data');
 const inputValue = document.querySelector('.input-value');
 const button = document.querySelector('.btn');
+const UrlAPI = 'https://pokeapi.co/api/v2/';
+let pokeid = 1;
 
-async function fetchPokemon(endpoint) {
-  const pokemonName = inputValue.value.trim();
-  const UrlAPI = 'https://pokeapi.co/api/v2/';
-  const returnAPI = await fetch(UrlAPI + endpoint + '/' + pokemonName);
+async function fetchPokemon(pokemon) {
+  const returnAPI = await fetch(UrlAPI + 'pokemon' + '/' + pokemon);
   const response = await returnAPI.json();
-  const imageReturn = response.sprites.front_default;
-  const nameReturn = response.name;
-  const abilityOneReturn = response.abilities[0];
-  const abilityTwoReturn = response.abilities[1];
-  const abilityOne = abilityOneReturn.ability.name;
-  const abilityTwo = abilityTwoReturn.ability.name;
 
-  // inserir mais de um endpoint na URl
-  // uma fução que recebe o endepoint como prametro
-  console.log(returnAPI);
-  return [nameReturn, imageReturn, abilityOne, abilityTwo];
+  return response;
 }
 
-async function showPokemon() {
-  const [pokeName, pokeImage, abilityOne, abilityTwo] = await fetchPokemon(
-    'pokemon'
-  );
-  const pokemonName = document.createElement('span');
-  const pokeabilityOne = document.createElement('span');
-  const pokeabilityTwo = document.createElement('span');
-  const pokemonImg = document.createElement('img');
+function createBtnNextPoke(id) {
+  const btnNext = document.createElement('button');
+  const idNextPokemon = id + 1;
 
-  pokemonName.innerHTML = 'Name: ' + (await pokeName);
-  pokeabilityOne.innerHTML = 'Primeira habilidade: ' + (await abilityOne);
-  pokeabilityTwo.innerHTML = 'Segunda habilidade 2: ' + (await abilityTwo);
-  pokemonImg.src = await pokeImage;
-  //pokemonability.innerHTML = await abilitiesReturn;
+  btnNext.innerHTML = 'Next';
+  btnNext.type = 'click';
+  btnNext.addEventListener('click', () => {
+    clearPokemonData();
+    showPokemon(idNextPokemon);
+  });
+
+  return btnNext;
+}
+
+function createBtnBackPoke(id) {
+  const btnBack = document.createElement('button');
+  const idBackPokemon = id - 1;
+
+  btnBack.innerHTML = 'Back';
+  btnBack.type = 'click';
+  if (idBackPokemon > 0) {
+    btnBack.addEventListener('click', () => {
+      clearPokemonData();
+      showPokemon(idBackPokemon);
+    });
+  } else {
+    btnBack.disabled = true;
+  }
+
+  return btnBack;
+}
+
+async function showPokemon(pokemon) {
+  const response = await fetchPokemon(pokemon);
+  const pokemonName = document.createElement('span');
+  const pokemonImg = document.createElement('img');
+  const { name, sprites, id } = response;
+  const { front_default } = sprites;
+
+  pokemonName.innerHTML = 'Name: ' + name;
+  pokemonImg.src = front_default;
   boxData.appendChild(pokemonImg);
   boxData.appendChild(pokemonName);
-  boxData.appendChild(pokeabilityOne);
-  boxData.appendChild(pokeabilityTwo);
+  boxData.appendChild(createBtnBackPoke(id));
+  boxData.appendChild(createBtnNextPoke(id));
 }
 
 function clearPokemonData() {
@@ -46,11 +64,9 @@ function clearPokemonData() {
 }
 
 form.addEventListener('submit', (event) => {
+  const pokemon = inputValue.value.trim() || pokeid;
+
   event.preventDefault();
   clearPokemonData();
-  showPokemon();
+  showPokemon(pokemon);
 });
-
-// esrtudar sobre função asincrona
-// duas funções uma para buscar o pokemon e outra para inserir ele na tela
-// function featch dinamica
