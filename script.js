@@ -18,10 +18,14 @@ function createBtnNextPoke(id) {
 
   btnNext.innerHTML = 'Next';
   btnNext.type = 'click';
-  btnNext.addEventListener('click', () => {
-    clearPokemonData();
-    showPokemon(idNextPokemon);
-  });
+  if (idNextPokemon < 906) {
+    btnNext.addEventListener('click', () => {
+      clearPokemonData();
+      showPokemon(idNextPokemon);
+    });
+  } else {
+    btnNext.disabled = true;
+  }
 
   return btnNext;
 }
@@ -51,7 +55,7 @@ async function showPokemon(pokemon) {
   const { name, sprites, id } = response;
   const { front_default } = sprites;
 
-  pokemonName.innerHTML = 'Name: ' + name;
+  pokemonName.innerHTML = 'Name: ' + name + id;
   pokemonImg.src = front_default;
   boxData.appendChild(pokemonImg);
   boxData.appendChild(pokemonName);
