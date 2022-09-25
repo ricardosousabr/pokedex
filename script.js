@@ -27,7 +27,6 @@ function createBtnNextPoke(id) {
   } else {
     btnNext.disabled = true;
   }
-
   return btnNext;
 }
 
@@ -51,21 +50,28 @@ function createBtnBackPoke(id) {
 }
 
 async function showPokemon(pokemon) {
-  const response = await fetchPokemon(pokemon);
-  const pokemonName = document.createElement('span');
-  const pokemonImg = document.createElement('img');
-  const boxButton = document.createElement('div');
-  const { name, sprites, id } = response;
-  const { front_default } = sprites;
+  try {
+    const response = await fetchPokemon(pokemon);
+    const pokemonName = document.createElement('span');
+    const pokemonImg = document.createElement('img');
+    const boxButton = document.createElement('div');
+    const { name, sprites, id } = response;
+    const { front_default } = sprites;
 
-  boxButton.classList.add('box-Button');
-  pokemonName.innerHTML = 'Name: ' + name;
-  pokemonImg.src = front_default;
-  boxData.appendChild(pokemonImg);
-  boxData.appendChild(pokemonName);
-  boxButton.appendChild(createBtnBackPoke(id));
-  boxButton.appendChild(createBtnNextPoke(id));
-  boxData.appendChild(boxButton);
+    boxButton.classList.add('box-Button');
+    pokemonName.innerHTML = 'Name: ' + name;
+    pokemonImg.src = front_default;
+    boxData.appendChild(pokemonImg);
+    boxData.appendChild(pokemonName);
+    boxButton.appendChild(createBtnBackPoke(id));
+    boxButton.appendChild(createBtnNextPoke(id));
+    boxData.appendChild(boxButton);
+  } catch (err) {
+    const erro = document.createElement('span');
+
+    erro.innerHTML = 'Pokemon Não encontrado';
+    boxData.appendChild(erro);
+  }
 }
 
 function clearPokemonData() {
