@@ -16,6 +16,7 @@ function createBtnNextPoke(id) {
   const btnNext = document.createElement('button');
   const idNextPokemon = id + 1;
 
+  btnNext.classList.add('btn');
   btnNext.innerHTML = 'Next';
   btnNext.type = 'click';
   if (idNextPokemon < 906) {
@@ -34,6 +35,7 @@ function createBtnBackPoke(id) {
   const btnBack = document.createElement('button');
   const idBackPokemon = id - 1;
 
+  btnBack.classList.add('btn');
   btnBack.innerHTML = 'Back';
   btnBack.type = 'click';
   if (idBackPokemon > 0) {
@@ -52,15 +54,18 @@ async function showPokemon(pokemon) {
   const response = await fetchPokemon(pokemon);
   const pokemonName = document.createElement('span');
   const pokemonImg = document.createElement('img');
+  const boxButton = document.createElement('div');
   const { name, sprites, id } = response;
   const { front_default } = sprites;
 
-  pokemonName.innerHTML = 'Name: ' + name + id;
+  boxButton.classList.add('box-Button');
+  pokemonName.innerHTML = 'Name: ' + name;
   pokemonImg.src = front_default;
   boxData.appendChild(pokemonImg);
   boxData.appendChild(pokemonName);
-  boxData.appendChild(createBtnBackPoke(id));
-  boxData.appendChild(createBtnNextPoke(id));
+  boxButton.appendChild(createBtnBackPoke(id));
+  boxButton.appendChild(createBtnNextPoke(id));
+  boxData.appendChild(boxButton);
 }
 
 function clearPokemonData() {
