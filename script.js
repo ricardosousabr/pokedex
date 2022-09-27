@@ -66,6 +66,7 @@ async function showPokemon(pokemon) {
   const { name, sprites, id } = response;
   const { front_default } = sprites;
 
+  pokemonImg.classList.add('pokemon-img');
   boxButton.classList.add('box-Button');
   pokemonName.innerHTML = 'Name: ' + name;
   pokemonImg.src = front_default;
