@@ -3,6 +3,7 @@ const boxData = document.querySelector('.pokemon-data');
 const inputValue = document.querySelector('.input-value');
 const button = document.querySelector('.btn');
 const UrlAPI = 'https://pokeapi.co/api/v2/';
+const urlImgPokemon = 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/';
 let pokeid = 1;
 
 async function fetchPokemon(pokemon) {
@@ -49,6 +50,15 @@ function createBtnBackPoke(id) {
   return btnBack;
 }
 
+function createPokemonImg(id) {
+  const pokemonImg = document.createElement('img');
+
+  pokemonImg.classList.add('pokemon-img');
+  pokemonImg.src = urlImgPokemon + "0".repeat(3-String(id).length) + id + ".png"
+
+  return pokemonImg;
+}
+
 async function showPokemon(pokemon) {
   let response;
   try {
@@ -61,16 +71,12 @@ async function showPokemon(pokemon) {
   }
 
   const pokemonName = document.createElement('span');
-  const pokemonImg = document.createElement('img');
   const boxButton = document.createElement('div');
-  const { name, sprites, id } = response;
-  const { front_default } = sprites;
+  const { name, id } = response;
 
-  pokemonImg.classList.add('pokemon-img');
   boxButton.classList.add('box-Button');
   pokemonName.innerHTML = 'Name: ' + name;
-  pokemonImg.src = front_default;
-  boxData.appendChild(pokemonImg);
+  boxData.appendChild(createPokemonImg(id));
   boxData.appendChild(pokemonName);
   boxButton.appendChild(createBtnBackPoke(id));
   boxButton.appendChild(createBtnNextPoke(id));
